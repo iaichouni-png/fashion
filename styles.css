@@ -438,7 +438,7 @@ h1 {
   background: linear-gradient(120deg, #ff4d8d, #ff7a59);
   margin: 0 0 10px;
   box-shadow: 0 12px 24px rgba(255, 77, 141, 0.32);
-  animation: buyBtnPulse 1.6s infinite;
+  animation: buyBtnPulse 0.9s infinite;
 }
 
 @keyframes buyBtnPulse {
