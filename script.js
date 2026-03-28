@@ -119,8 +119,11 @@ const qtyPlusBtn = document.getElementById("qtyPlus");
 const qtyMinusBtn = document.getElementById("qtyMinus");
 const totalPriceEl = document.getElementById("totalPrice");
 const successBanner = document.getElementById("successBanner");
+const loadingState = document.getElementById("loadingState");
+const specialOfferBanner = document.getElementById("specialOfferBanner");
 const countdownTimerEl = document.getElementById("countdownTimer");
 const UNIT_PRICE = 149;
+const SPECIAL_TWO_PRICE = 259;
 
 function applyLanguage(lang) {
   const t = content[lang];
@@ -195,12 +198,35 @@ function getSafeQuantity() {
   return Math.floor(raw);
 }
 
+function calculateTotal(qty) {
+  if (qty === 2) return SPECIAL_TWO_PRICE;
+  return qty * UNIT_PRICE;
+}
+
+function updateSpecialOfferVisibility() {
+  if (!specialOfferBanner) return;
+  specialOfferBanner.removeAttribute("hidden");
+}
+
+function updateOrderNote(qty) {
+  if (!orderProductNoteEl) return;
+  if (state.lang === "ar") {
+    orderProductNoteEl.textContent = `سوف تقوم بطلب ${qty} منتج: الحقيبة الذكية للحماية من السرقة`;
+  } else {
+    orderProductNoteEl.textContent = `Vous commandez ${qty} produit(s) : Sac intelligent anti-vol`;
+  }
+}
+
 function updatePriceUI() {
   const qty = getSafeQuantity();
-  const total = qty * UNIT_PRICE;
+  const total = calculateTotal(qty);
+
   if (quantityInput) quantityInput.value = String(qty);
   if (totalPriceEl) totalPriceEl.textContent = state.lang === "ar" ? `${total} درهم` : `${total} MAD`;
   buyBtn.textContent = state.lang === "ar" ? `اشتري الآن - ${total} درهم` : `Acheter maintenant - ${total} MAD`;
+
+  updateOrderNote(qty);
+  updateSpecialOfferVisibility();
 }
 
 function setLanguage(lang) {
@@ -319,7 +345,7 @@ orderForm.addEventListener("submit", async (e) => {
   }
 
   const qty = getSafeQuantity();
-  const total = qty * UNIT_PRICE;
+  const total = calculateTotal(qty);
 
   const normalizedPhone = normalizePhoneInput();
   if (!isValidPhone(normalizedPhone)) {
@@ -327,6 +353,9 @@ orderForm.addEventListener("submit", async (e) => {
     if (phoneInput) phoneInput.focus();
     return;
   }
+
+  if (loadingState) loadingState.removeAttribute("hidden");
+  await new Promise((resolve) => setTimeout(resolve, 500));
 
   const payload = {
     fullName: document.getElementById("fullName").value.trim(),
@@ -350,6 +379,7 @@ orderForm.addEventListener("submit", async (e) => {
 
     if (res || res === undefined) {
       formMessage.textContent = "";
+      if (loadingState) loadingState.setAttribute("hidden", "");
       if (successBanner) {
         successBanner.textContent = content[state.lang].success;
         successBanner.removeAttribute("hidden");
@@ -358,9 +388,11 @@ orderForm.addEventListener("submit", async (e) => {
       if (quantityInput) quantityInput.value = "1";
       updatePriceUI();
     } else {
+      if (loadingState) loadingState.setAttribute("hidden", "");
       formMessage.textContent = content[state.lang].fail;
     }
   } catch (err) {
+    if (loadingState) loadingState.setAttribute("hidden", "");
     formMessage.textContent = content[state.lang].fail;
   }
 });
