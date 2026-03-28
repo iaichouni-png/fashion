@@ -30,7 +30,7 @@ html, body {
   color: var(--text);
   background:
     linear-gradient(rgba(12, 21, 42, 0.72), rgba(12, 21, 42, 0.72)),
-    url("assets/bg/17973908.jpg") center/cover fixed no-repeat,
+    url("17973908.jpg") center/cover fixed no-repeat,
     radial-gradient(1200px 400px at 80% -10%, rgba(91, 61, 245, 0.12), transparent 60%),
     radial-gradient(900px 350px at 10% -10%, rgba(0, 179, 255, 0.12), transparent 60%),
     var(--bg);
