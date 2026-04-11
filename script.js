@@ -122,7 +122,7 @@ const successBanner = document.getElementById("successBanner");
 const loadingState = document.getElementById("loadingState");
 const specialOfferBanner = document.getElementById("specialOfferBanner");
 const countdownTimerEl = document.getElementById("countdownTimer");
-const UNIT_PRICE = 149;
+const UNIT_PRICE = 139;
 const SPECIAL_TWO_PRICE = 259;
 
 function applyLanguage(lang) {
@@ -362,7 +362,7 @@ orderForm.addEventListener("submit", async (e) => {
     phone: normalizedPhone,
     address: document.getElementById("address").value.trim(),
     product: state.lang === "ar" ? "الحقيبة الذكية للحماية من السرقة" : "Sac intelligent anti-vol",
-    price: state.lang === "ar" ? "149 درهم" : "149 MAD",
+    price: state.lang === "ar" ? "139 درهم" : "139 MAD",
     source: window.location.href,
     quantity: qty,
     totalPrice: state.lang === "ar" ? `${total} درهم` : `${total} MAD`,
